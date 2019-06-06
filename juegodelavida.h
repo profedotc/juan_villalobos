@@ -15,7 +15,5 @@ struct jdlv {
 void gol_init(struct jdlv *jdlv);
 void gol_print(const struct jdlv *jdlv);
 void gol_step(struct jdlv *jdlv);
-int gol_count_neighbors(const struct jdlv *jdlv, int x, int y);
-bool gol_get_cell(const struct jdlv *jdlv, int x, int y);
 
 #endif
