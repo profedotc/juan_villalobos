@@ -36,7 +36,7 @@ void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y]) {
 	gol_copy(mundoa, mundob);
 }
 
-int gol_count_neighbors(bool mundo[GOL_SIZE_X][GOL_SIZE_Y], int x, int y) {
+int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y) {
 	int count = 0;
 	count += gol_get_cell(mundo, x - 1, y + 1);
 	count += gol_get_cell(mundo, x - 0, y + 1);
@@ -49,16 +49,16 @@ int gol_count_neighbors(bool mundo[GOL_SIZE_X][GOL_SIZE_Y], int x, int y) {
 	return count;
 }
 
-bool gol_get_cell(bool mundo[GOL_SIZE_X][GOL_SIZE_Y], int x, int y) {
-	if (x >= GOL_SIZE_X) {
+bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y) {
+	if (x >= TAM_X) {
         x = 0;
     } else if (x < 0) {
-            x = GOL_SIZE_X - 1;
+            x = TAM_X - 1;
     } 
-    if (y >= GOL_SIZE_Y) {
+    if (y >= TAM_Y) {
             y = 0;
     } else if (y < 0) {
-            y = GOL_SIZE_Y - 1;
+            y = TAM_Y - 1;
     }
 	return mundo[x][y];
 }

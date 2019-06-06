@@ -24,7 +24,7 @@ int main() {
 	gol_init(mundos[mundo]);
 	do {
 		printf("\033cIteration %d\n", i++);
-		gol_print(mundoa);
+		gol_print(mundos[mundo]);
 		gol_step(mundos[mundo], mundos[!mundo]);
 		mundo = !mundo;
 	} while (getchar() != 'q');
