@@ -1,8 +1,7 @@
-#include <stdio.h>
 #include "juegodelavida.h"
+#include <stdio.h>
 
 void gol_init(struct jdlv *jdlv) {
-
 	jdlv->mundo = 0;
 	for (int i = 0; i < TAM_X; i++){
 		for (int j = 0; j < TAM_Y; j++){
@@ -16,7 +15,7 @@ void gol_init(struct jdlv *jdlv) {
 	jdlv->mundos[jdlv->mundo][2][2] = true;      
 }
 
-void gol_print(struct jdlv *jdlv) {
+void gol_print(const struct jdlv *jdlv) {
 	for (int i = 0; i < TAM_X; i++) {
 		for (int j = 0; j < TAM_Y; j++) {
 			printf("%s", jdlv->mundos[jdlv->mundo][i][j] ? " #" : " .");
@@ -37,20 +36,20 @@ void gol_step(struct jdlv *jdlv) {
 	jdlv->mundo = !jdlv->mundo;
 }
 
-int gol_count_neighbors(bool mundo[GOL_SIZE_X][GOL_SIZE_Y], int x, int y) {
+int gol_count_neighbors(const struct jdlv *jdlv, int x, int y) {
 	int count = 0;
-	count += gol_get_cell(mundo, x - 1, y + 1);
-	count += gol_get_cell(mundo, x - 0, y + 1);
-	count += gol_get_cell(mundo, x + 1, y + 1);
-	count += gol_get_cell(mundo, x - 1, y + 0);
-	count += gol_get_cell(mundo, x + 1, y + 0);
-	count += gol_get_cell(mundo, x - 1, y - 1);
-	count += gol_get_cell(mundo, x - 0, y - 1);
-	count += gol_get_cell(mundo, x + 1, y - 1);
+	count += gol_get_cell(jdlv, x - 1, y + 1);
+	count += gol_get_cell(jdlv, x - 0, y + 1);
+	count += gol_get_cell(jdlv, x + 1, y + 1);
+	count += gol_get_cell(jdlv, x - 1, y + 0);
+	count += gol_get_cell(jdlv, x + 1, y + 0);
+	count += gol_get_cell(jdlv, x - 1, y - 1);
+	count += gol_get_cell(jdlv, x - 0, y - 1);
+	count += gol_get_cell(jdlv, x + 1, y - 1);
 	return count;
 }
 
-bool gol_get_cell(bool mundo[GOL_SIZE_X][GOL_SIZE_Y], int x, int y) {
+bool gol_get_cell(const struct jdlv *jdlv, int x, int y) {
 	if (x >= GOL_SIZE_X) {
         x = 0;
     } else if (x < 0) {
@@ -61,5 +60,5 @@ bool gol_get_cell(bool mundo[GOL_SIZE_X][GOL_SIZE_Y], int x, int y) {
     } else if (y < 0) {
             y = GOL_SIZE_Y - 1;
     }
-	return mundo[x][y];
+	return jdlv->mundos[jdlv->mundo][x][y];
 }
