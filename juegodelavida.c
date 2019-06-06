@@ -65,3 +65,33 @@ bool get_cell(const struct jdlv *jdlv, int x, int y) {
     }
 	return jdlv->mundos[jdlv->mundo][x][y];
 }
+
+
+static int count_neighbors(const struct jdlv *jdlv, int x, int y) {
+	int count = 0;
+	count += get_cell(jdlv, x - 1, y + 1);
+	count += get_cell(jdlv, x - 0, y + 1);
+	count += get_cell(jdlv, x + 1, y + 1);
+	count += get_cell(jdlv, x - 1, y + 0);
+	count += get_cell(jdlv, x + 1, y + 0);
+	count += get_cell(jdlv, x - 1, y - 1);
+	count += get_cell(jdlv, x - 0, y - 1);
+	count += get_cell(jdlv, x + 1, y - 1);
+	return count;
+}
+
+static bool get_cell(const struct jdlv *jdlv, int x, int y) {
+	if (x >= TAM_X){ 
+		x = 0;
+	} else if (x < 0){
+		x = TAM_X - 1;
+	}
+	if (y >= TAM_Y) {
+		y = 0;
+	} else if (y < 0) {
+		y = TAM_Y - 1;
+	}
+		
+
+	return jdlv->mundos[jdlv->mundo][x][y];
+}
