@@ -28,7 +28,7 @@ void gol_print(const struct jdlv *jdlv) {
 void gol_step(struct jdlv *jdlv) {
 	for (int i = 0; i < TAM_X; i++) {
 		for (int j = 0; j < TAM_Y; j++) {
-			int n = gol_count_neighbors(mundoa, i, j);
+			int n = gol_count_neighbors(jdlv, i, j);
 			jdlv->mundos[!jdlv->mundo][i][j] =
 				(jdlv->mundos[jdlv->mundo][i][j] && n == 2) || n == 3;
 		}
@@ -50,12 +50,12 @@ int gol_count_neighbors(const struct jdlv *jdlv, int x, int y) {
 }
 
 bool gol_get_cell(const struct jdlv *jdlv, int x, int y) {
-	if (x >= GOL_SIZE_X) {
+	if (x >= TAM_X) {
         x = 0;
     } else if (x < 0) {
-            x = GOL_SIZE_X - 1;
+            x = TAM_X - 1;
     } 
-    if (y >= GOL_SIZE_Y) {
+    if (y >= TAM_Y) {
             y = 0;
     } else if (y < 0) {
             y = GOL_SIZE_Y - 1;
