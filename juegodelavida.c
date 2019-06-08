@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include "juegodelavida.h"
 
-void gol_init(bool mundo[TAM_X][TAM_Y])
-{
+void gol_init(bool mundo[TAM_X][TAM_Y]) {
 	for (int i = 0; i < TAM_X; i++)
 		for (int j = 0; j < TAM_Y; j++)
 			mundo[i][j] = false;
-
 	mundo[0][1] = true;
 	mundo[1][2] = true;
 	mundo[2][0] = true;
@@ -14,8 +12,7 @@ void gol_init(bool mundo[TAM_X][TAM_Y])
 	mundo[2][2] = true;
 }
 
-void gol_print(bool mundo[TAM_X][TAM_Y])
-{
+void gol_print(bool mundo[TAM_X][TAM_Y]) {
 	for (int i = 0; i < TAM_X; i++) {
 		for (int j = 0; j < TAM_Y; j++) {
 			printf("%s", mundo[i][j] ? " #" : " .");
@@ -25,8 +22,7 @@ void gol_print(bool mundo[TAM_X][TAM_Y])
 	printf("\n");
 }
 
-void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y])
-{
+void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y]) {
 	for (int i = 0; i < TAM_X; i++) {
 		for (int j = 0; j < TAM_Y; j++) {
 			int n = gol_count_neighbors(mundoa, i, j);
@@ -35,10 +31,8 @@ void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y])
 	}
 }
 
-int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y)
-{
+int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y) {
 	int count = 0;
-
 	count += gol_get_cell(mundo, x - 1, y + 1);
 	count += gol_get_cell(mundo, x - 0, y + 1);
 	count += gol_get_cell(mundo, x + 1, y + 1);
@@ -47,12 +41,10 @@ int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y)
 	count += gol_get_cell(mundo, x - 1, y - 1);
 	count += gol_get_cell(mundo, x - 0, y - 1);
 	count += gol_get_cell(mundo, x + 1, y - 1);
-
 	return count;
 }
 
-bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y)
-{
+bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y) {
 	if (x >= TAM_X)
 		x = 0;
 	else if (x < 0)
