@@ -7,17 +7,14 @@
 
 #include "juegodelavida.h"
 
-int main()
-{
+int main() {
 	struct jdlv juegodelavida;
 	int i = 0;
-
 	gol_init(&juegodelavida);
 	do {
 		printf("\033cIteration %d\n", i++);
 		gol_print(&juegodelavida);
 		gol_step(&juegodelavida);
 	} while (getchar() != 'q');
-
 	return EXIT_SUCCESS;
 }

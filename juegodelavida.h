@@ -8,7 +8,7 @@
 
 struct jdlv {
 	bool mundos[2][TAM_X][TAM_Y];
-	unsigned int mundos;
+	unsigned int mundo;
 };
 
 void gol_init(struct jdlv *jdlv);

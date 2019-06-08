@@ -1,4 +1,4 @@
-#include "gol.h"
+#include "juegodelavida.h"
 
 #include <stdio.h>
 
