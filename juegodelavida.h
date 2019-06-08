@@ -1,4 +1,3 @@
-
 #ifndef _JUEGODELAVIDA_H_
 #define _JUEGODELAVIDA_H_
 
@@ -9,7 +8,7 @@
 
 struct jdlv {
 	bool mundos[2][TAM_X][TAM_Y];
-	unsigned int mundo;
+	unsigned int mundos;
 };
 
 void gol_init(struct jdlv *jdlv);

@@ -4,22 +4,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+
 #include "juegodelavida.h"
 
-#define TAM_X 5
-#define TAM_Y 5
-
-int main() {
-	struct jdlv jdlv;
+int main()
+{
+	struct jdlv juegodelavida;
 	int i = 0;
 
-	gol_init(&jdlv);
+	gol_init(&juegodelavida);
 	do {
 		printf("\033cIteration %d\n", i++);
-		gol_print(&jdlv);
-		gol_step(&jdlv);
+		gol_print(&juegodelavida);
+		gol_step(&juegodelavida);
 	} while (getchar() != 'q');
 
-return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
