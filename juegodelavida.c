@@ -1,6 +1,5 @@
-#include "juegodelavida.h"
-
 #include <stdio.h>
+#include "juegodelavida.h"
 
 void gol_init(bool mundo[TAM_X][TAM_Y])
 {
@@ -54,7 +53,6 @@ int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y)
 
 bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y)
 {
-	// Fix coords
 	if (x >= TAM_X)
 		x = 0;
 	else if (x < 0)
