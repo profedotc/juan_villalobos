@@ -5,8 +5,8 @@ CFLAGS = -Wall -Wextra -std=c99
 
 all: main
 
-juegodelavida: main.o juegodelavida.o
-	$(CC) main.o juegodelavida.o -o 
+main: main.o juegodelavida.o
+	$(CC) main.o main.o -o main
 
 main.o: main.c juegodelavida.h
 	$(CC) -c main.c
@@ -16,4 +16,4 @@ juegodelavida.o: juegodelavida.c juegodelavida.h
 
 clean:
 	rm *.o
-rm juegodelavida
+rm main
