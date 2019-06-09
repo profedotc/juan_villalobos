@@ -3,17 +3,17 @@ CFLAGS = -Wall -Wextra -std=c99
 
 .PHONY: all test clean
 
-all: main
+all: gol
 
-main: main.o juegodelavida.o
-	$(CC) main.o main.o -o main
+gol: main.o gol.o
+	$(CC) main.o gol.o -o gol
 
-main.o: main.c juegodelavida.h
+main.o: main.c gol.h
 	$(CC) -c main.c
 
-juegodelavida.o: juegodelavida.c juegodelavida.h
-	$(CC) -c juegodelavida.c
+gol.o: gol.c gol.h
+	$(CC) -c gol.c
 
 clean:
 	rm *.o
-rm main
+rm gol

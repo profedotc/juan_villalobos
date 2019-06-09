@@ -5,12 +5,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "juegodelavida.h"
 
-int main() {
+#include "gol.h"
+
+int main()
+{
 	int i = 0;
 	bool mundos[2][TAM_X][TAM_Y];
 	unsigned int mundo = 0;
+
 	gol_init(mundos[mundo]);
 	do {
 		printf("\033cIteration %d\n", i++);
@@ -18,5 +21,6 @@ int main() {
 		gol_step(mundos[mundo], mundos[!mundo]);
 		mundo = !mundo;
 	} while (getchar() != 'q');
+
 	return EXIT_SUCCESS;
 }
