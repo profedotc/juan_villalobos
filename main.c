@@ -6,21 +6,22 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define TAM_X 5
-#define TAM_Y 5
+#define TAMX 10
+#define TAMY 20
 
-void gol_init(bool mundo[TAM_X][TAM_Y]);
-void gol_print(bool mundo[TAM_X][TAM_Y]);
-void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y]);
-int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y);
-bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y);
-void gol_copy(bool dst[TAM_X][TAM_Y], bool src[TAM_X][TAM_Y]);
+void gol_init(bool mundo[TAMX][TAMY]);
+void gol_print(bool mundo[TAMX][TAMY]);
+void gol_step(bool mundoa[TAMX][TAMY], bool mundob[TAMX][TAMY]);
+int gol_count_neighbors(bool mundo[TAMX][TAMY], int x, int y);
+bool gol_get_cell(bool mundo[TAMX][TAMY], int x, int y);
+void gol_copy(bool dst[TAMX][TAMY], bool src[TAMX][TAMY]);
 
 int main()
 {
 	int i = 0;
-	bool mundos[2][TAM_X][TAM_Y];
+	bool mundos[2][TAMX][TAMY];
 	unsigned int mundo = 0;
+
 	gol_init(mundos[mundo]);
 	do {
 		printf("\033cIteration %d\n", i++);
@@ -28,12 +29,14 @@ int main()
 		gol_step(mundos[mundo], mundos[!mundo]);
 		mundo = !mundo;
 	} while (getchar() != 'q');
+
 	return EXIT_SUCCESS;
 }
 
-void gol_init(bool mundo[TAM_X][TAM_Y]){
-	for (int i = 0; i < TAM_X; i++)
-		for (int j = 0; j < TAM_Y; j++)
+void gol_init(bool mundo[TAMX][TAMY])
+{
+	for (int i = 0; i < TAMX; i++)
+		for (int j = 0; j < TAMY; j++)
 			mundo[i][j] = false;
 
 	// Glider
@@ -44,9 +47,10 @@ void gol_init(bool mundo[TAM_X][TAM_Y]){
 	mundo[2][2] = true;
 }
 
-void gol_print(bool mundo[TAM_X][TAM_Y]) {
-	for (int i = 0; i < TAM_X; i++) {
-		for (int j = 0; j < TAM_Y; j++) {
+void gol_print(bool mundo[TAMX][TAMY])
+{
+	for (int i = 0; i < TAMX; i++) {
+		for (int j = 0; j < TAMY; j++) {
 			printf("%s", mundo[i][j] ? " #" : " .");
 		}
 		printf("\n");
@@ -54,17 +58,20 @@ void gol_print(bool mundo[TAM_X][TAM_Y]) {
 	printf("\n");
 }
 
-void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y]) {
-	for (int i = 0; i < TAM_X; i++) {
-		for (int j = 0; j < TAM_Y; j++) {
+void gol_step(bool mundoa[TAMX][TAMY], bool mundob[TAMX][TAMY])
+{
+	for (int i = 0; i < TAMX; i++) {
+		for (int j = 0; j < TAMY; j++) {
 			int n = gol_count_neighbors(mundoa, i, j);
 			mundob[i][j] = (mundoa[i][j] && n == 2) || n == 3;
 		}
 	}
 }
 
-int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y) {
+int gol_count_neighbors(bool mundo[TAMX][TAMY], int x, int y)
+{
 	int count = 0;
+
 	count += gol_get_cell(mundo, x - 1, y + 1);
 	count += gol_get_cell(mundo, x - 0, y + 1);
 	count += gol_get_cell(mundo, x + 1, y + 1);
@@ -73,18 +80,22 @@ int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y) {
 	count += gol_get_cell(mundo, x - 1, y - 1);
 	count += gol_get_cell(mundo, x - 0, y - 1);
 	count += gol_get_cell(mundo, x + 1, y - 1);
+
 	return count;
 }
 
-bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y) {
-	if (x >= TAM_X)
+bool gol_get_cell(bool mundo[TAMX][TAMY], int x, int y)
+{
+	// Fix coords
+	if (x >= TAMX)
 		x = 0;
 	else if (x < 0)
-		x = TAM_X - 1;
+		x = TAMX - 1;
 
-	if (y >= TAM_Y)
+	if (y >= TAMY)
 		y = 0;
 	else if (y < 0)
-		y = TAM_Y - 1;
+		y = TAMY - 1;
+
 	return mundo[x][y];
 }
