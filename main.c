@@ -2,19 +2,22 @@
 // Created by Juan Villalobos Quiros on 07/05/2019.
 //
 
+
 #include <stdio.h>
 #include <stdlib.h>
+#include "gol.h"
 
-#include "juegodelavida.h"
-
-int main() {
-	struct jdlv juegodelavida;
+int main()
+{
+	struct gol gol;
 	int i = 0;
-	gol_init(&juegodelavida);
+
+	gol_init(&gol);
 	do {
 		printf("\033cIteration %d\n", i++);
-		gol_print(&juegodelavida);
-		gol_step(&juegodelavida);
+		gol_print(&gol);
+		gol_step(&gol);
 	} while (getchar() != 'q');
+
 	return EXIT_SUCCESS;
 }
