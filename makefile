@@ -1,19 +1,12 @@
-CC = gcc $(CFLAGS)
-CFLAGS = -Wall -Wextra -std=c99
-
-.PHONY: all test clean
-
-all: main
-
-main: main.o juegodelavida.o
-	$(CC) main.o main.o -o main
-
-main.o: main.c juegodelavida.h
-	$(CC) -c main.c
-
-juegodelavida.o: juegodelavida.c juegodelavida.h
-	$(CC) -c juegodelavida.c
-
-clean:
-	rm *.o
-rm main
+.PHONY: all clean run
+all: exec
+exec: main.o gol.o
+	gcc main.o gol.o -o exec
+main.o: main.c
+	gcc -c main.c
+gol.o: gol.h gol.c
+	gcc -c gol.c
+run: exec
+	./exec
+clean: clean
+	rm main.o gol.o exec 
