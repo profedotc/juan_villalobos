@@ -11,7 +11,7 @@
 #define TAM_Y 5
 
 int main() {
-	struct jdlv jdlv;
+	struct jdlv *jdlv;
 	int i = 0;
 
 	gol_init(&jdlv);
