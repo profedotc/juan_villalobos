@@ -9,15 +9,18 @@
 
 int main()
 {
+	int iteration = 0;
 	struct gol gol;
-	int i = 0;
-
-	gol_init(&gol);
+	gol_alloc(&gol, TAM_X, TAM_Y);
+	gol_init(&gol, TAM_X, TAM_Y);
 	do {
-		printf("\033cIteration %d\n", i++);
-		gol_print(&gol);
-		gol_step(&gol);
+		printf("\033cIteration %d\n", it);
+		gol_print(&gol, TAM_X, TAM_Y);
+
+		gol_step(&gol, TAM_X, TAM_Y);
+		++iteration;
 	} while (getchar() != 'q');
 
+	gol_free(&gol, TAM_Y);
 	return EXIT_SUCCESS;
 }
