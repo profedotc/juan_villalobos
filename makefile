@@ -1,5 +1,7 @@
 CC = gcc $(CFLAGS)
+CCWVAL = gcc $(VALGRINDFLAGS)
 CFLAGS = -Wall -Wextra -std=c99
+VALGRINDFLAGS = -leak-check=full
 
 .PHONY: all test debug release clean run
 
@@ -7,6 +9,13 @@ all: exec
 
 release : CFLAGS += -O3
 release : gol
+
+valgrind:
+        valgrind ./mem_test
+
+test: mem_test.o
+	$(CCWVAL) mem_test.o
+	valgrind ./mem_test
 
 debug : CFLAGS += -g -O0
 debug : gol
