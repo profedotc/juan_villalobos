@@ -1,85 +1,109 @@
+//
+// Created by Juan Villalobos Quiros on 07/05/2019.
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
-void gol_init(/* Recibo un mundo */);
-void gol_print(/* Recibo un mundo */);
-void gol_step(/* Recibo dos mundos */);
-int gol_count_neighbors(/* Recibo un mundo y unas coordenadas */);
-bool gol_get_cell(/* Recibo un mundo y unas coordenadas */);
-void gol_copy(/* Recibo dos mundos */);
+#define TAM_X 10
+#define TAM_Y 20
+
+void gol_init(bool mundo[TAM_X][TAM_Y]);
+void gol_print(bool mundo[TAM_X][TAM_Y]);
+void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y]);
+int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y);
+bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y);
+void gol_copy(bool dst[TAM_X][TAM_Y], bool src[TAM_X][TAM_Y]);
 
 int main()
 {
 	int i = 0;
-	// TODO: Declara dos mundos
+	bool mundo_a[TAM_X][TAM_Y];
+	bool mundo_b[TAM_X][TAM_Y];
 
-	// TODO: inicializa el mundo
+	gol_init(mundo_a);
 	do {
 		printf("\033cIteration %d\n", i++);
-		// TODO: Imprime el mundo
-		// TODO: Itera
+		gol_print(mundo_a);
+		gol_step(mundo_a, mundo_b);
 	} while (getchar() != 'q');
 
 	return EXIT_SUCCESS;
 }
 
-void gol_init(/* Recibo un mundo */)
+void gol_init(bool mundo[TAM_X][TAM_Y])
 {
-	// TODO: Poner el mundo a false
+	for (int i = 0; i < TAM_X; i++)
+		for (int j = 0; j < TAM_Y; j++)
+			mundo[i][j] = false;
 
-	/* TODO: Inicializar con el patrón del glider:
-	 *           . # .
-	 *           . . #
-	 *           # # #
-	 */
+	// Glider
+	mundo[0][1] = true;
+	mundo[1][2] = true;
+	mundo[2][0] = true;
+	mundo[2][1] = true;
+	mundo[2][2] = true;
 }
 
-void gol_print(/* Recibo un mundo */)
+void gol_print(bool mundo[TAM_X][TAM_Y])
 {
-	// TODO: Imprimir el mundo por consola. Sugerencia:
-	/*
-	 *     . # . . . . . . . .
-	 *     . . # . . . . . . .
-	 *     # # # . . . . . . .
-	 *     . . . . . . . . . .
-	 *     . . . . . . . . . .
-	 *     . . . . . . . . . .
-	 *     . . . . . . . . . .
-	 *     . . . . . . . . . .
-	 *     . . . . . . . . . .
-	 *     . . . . . . . . . .
-	 */
+	for (int i = 0; i < TAM_X; i++) {
+		for (int j = 0; j < TAM_Y; j++) {
+			printf("%s", mundo[i][j] ? " #" : " .");
+		}
+		printf("\n");
+	}
+	printf("\n");
 }
 
-void gol_step(/* Recibo dos mundos */)
+void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y])
 {
-	/*
-	 * TODO:
-	 * - Recorrer el mundo célula por célula comprobando si nace, sobrevive
-	 *   o muere.
-	 *
-	 * - No se puede cambiar el estado del mundo a la vez que se recorre:
-	 *   Usar un mundo auxiliar para guardar el siguiente estado.
-	 *
-	 * - Copiar el mundo auxiliar sobre el mundo principal
-	 */
+	for (int i = 0; i < TAM_X; i++) {
+		for (int j = 0; j < TAM_Y; j++) {
+			int n = gol_count_neighbors(mundoa, i, j);
+			mundob[i][j] = (mundoa[i][j] && n == 2) || n == 3;
+		}
+	}
+
+	gol_copy(mundoa, mundob);
 }
 
-int gol_count_neighbors(/* Recibo un mundo y unas coordenadas */)
+int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y)
 {
-	// Devuelve el número de vecinos
+	int count = 0;
+
+	count += gol_get_cell(mundo, x - 1, y + 1);
+	count += gol_get_cell(mundo, x - 0, y + 1);
+	count += gol_get_cell(mundo, x + 1, y + 1);
+	count += gol_get_cell(mundo, x - 1, y + 0);
+	count += gol_get_cell(mundo, x + 1, y + 0);
+	count += gol_get_cell(mundo, x - 1, y - 1);
+	count += gol_get_cell(mundo, x - 0, y - 1);
+	count += gol_get_cell(mundo, x + 1, y - 1);
+
+	return count;
 }
 
-bool gol_get_cell(/* Recibo un mundo y unas coordenadas */)
+bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y)
 {
-	/*
-	 * TODO: Devuelve el estado de la célula de posición indicada
-	 * (¡cuidado con los límites del array!)
-	 */
+	// Fix coords
+	if (x >= TAM_X)
+		x = 0;
+	else if (x < 0)
+		x = TAM_X - 1;
+
+	if (y >= TAM_Y)
+		y = 0;
+	else if (y < 0)
+		y = TAM_Y - 1;
+
+	return mundo[x][y];
 }
 
-void gol_copy(/* Recibo dos mundos */)
+void gol_copy(bool dst[TAM_X][TAM_Y], bool src[TAM_X][TAM_Y])
 {
-	// TODO: copia el mundo segundo mundo sobre el primero
+	for (int i = 0; i < TAM_X; i++)
+		for (int j = 0; j < TAM_Y; j++)
+			dst[i][j] = src[i][j];
 }
