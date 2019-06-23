@@ -19,6 +19,7 @@ void gol_copy(bool dst[TAM_X][TAM_Y], bool src[TAM_X][TAM_Y]);
 int main()
 {
 	int i = 0;
+  
 	bool mundos[2][TAM_X][TAM_Y];
 	unsigned int mundo = 0;
 
@@ -28,6 +29,7 @@ int main()
 		gol_print(mundos[mundo]);
 		gol_step(mundos[mundo], mundos[!mundo]);
 		mundo = !mundo;
+
 	} while (getchar() != 'q');
 
 	return EXIT_SUCCESS;
@@ -98,4 +100,5 @@ bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y)
 		y = TAM_Y - 1;
 
 	return mundo[x][y];
+
 }
