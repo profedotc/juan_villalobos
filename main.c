@@ -19,14 +19,17 @@ void gol_copy(bool dst[TAM_X][TAM_Y], bool src[TAM_X][TAM_Y]);
 int main()
 {
 	int i = 0;
-	bool mundo_a[TAM_X][TAM_Y];
-	bool mundo_b[TAM_X][TAM_Y];
+  
+	bool mundos[2][TAM_X][TAM_Y];
+	unsigned int mundo = 0;
 
-	gol_init(mundo_a);
+	gol_init(mundos[mundo]);
 	do {
 		printf("\033cIteration %d\n", i++);
-		gol_print(mundo_a);
-		gol_step(mundo_a, mundo_b);
+		gol_print(mundos[mundo]);
+		gol_step(mundos[mundo], mundos[!mundo]);
+		mundo = !mundo;
+
 	} while (getchar() != 'q');
 
 	return EXIT_SUCCESS;
@@ -65,8 +68,6 @@ void gol_step(bool mundoa[TAM_X][TAM_Y], bool mundob[TAM_X][TAM_Y])
 			mundob[i][j] = (mundoa[i][j] && n == 2) || n == 3;
 		}
 	}
-
-	gol_copy(mundoa, mundob);
 }
 
 int gol_count_neighbors(bool mundo[TAM_X][TAM_Y], int x, int y)
@@ -99,11 +100,5 @@ bool gol_get_cell(bool mundo[TAM_X][TAM_Y], int x, int y)
 		y = TAM_Y - 1;
 
 	return mundo[x][y];
-}
 
-void gol_copy(bool dst[TAM_X][TAM_Y], bool src[TAM_X][TAM_Y])
-{
-	for (int i = 0; i < TAM_X; i++)
-		for (int j = 0; j < TAM_Y; j++)
-			dst[i][j] = src[i][j];
 }
