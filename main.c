@@ -2,9 +2,9 @@
 // Created by Juan Villalobos Quiros on 07/05/2019.
 //
 
-
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "gol.h"
 
 int main()

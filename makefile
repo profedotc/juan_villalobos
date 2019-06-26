@@ -13,7 +13,7 @@ debug : gol
 
 exec: main.o gol.o
 	$(CC) main.o gol.o -o exec
-main.o: main.c
+main.o: main.c gol.h
 	$(CC) -c main.c
 gol.o: gol.h gol.c
 	$(CC) -c gol.c

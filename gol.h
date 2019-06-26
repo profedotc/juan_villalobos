@@ -6,6 +6,7 @@
 #define TAM_X 10
 #define TAM_Y 20
 
+
 struct gol {
 	bool mundos[2][TAM_X][TAM_Y];
 	unsigned int mundo;
