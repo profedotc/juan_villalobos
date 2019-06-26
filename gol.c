@@ -2,102 +2,105 @@
 
 #include <stdio.h>
 
-static bool get_cell(const struct gol *gol, int x, int y);
-static int count_neighbors(const struct gol *gol, int x, int y);
-
 enum mundo {
   ACTUAL = 0,
   SIGUIENTE = 1,
 };
 
-void gol_init(struct gol *gol, const int x, const int y) {
-  for (int i = 0; i < x; i++) {
-    for (int j = 0; j < y; j++) {
-      gol->mundos[0][i][j] = false;
+static bool get_cell(const struct gol *gol, int x, int y);
+static int count_neighbors(const struct gol *gol, int x, int y);
+
+void gol_alloc(struct gol *gol, int x, int y)
+{
+    gol->mundos[ACTUAL] = (bool **)malloc(x * sizeof(bool*));
+    gol->mundos[SIGUIENTE] = (bool **)malloc(x * sizeof(bool*));
+    for (int k = 0; k < x; k++) {
+        gol->mundos[ACTUAL][k] = (bool *)malloc(y * sizeof(bool));
+        gol->mundos[SIGUIENTE][k] = (bool *)malloc(y * sizeof(bool));
     }
-  }
-  gol->mundos[ACTUAL][1][0] = true;
-  gol->mundos[ACTUAL][1][1] = true;
-  gol->mundos[ACTUAL][1][2] = true;
+    gol->x = x;
+    gol->y = y;
 }
 
-void gol_print(const struct gol *gol, const int x, const int y) {
-  for (int i = 0; i < x; i++) {
-    for (int j = 0; j < y; j++) {
-      printf("%c", gOL->mundos[ACTUAL][i][j] ? '#' : '.');
+void gol_free(struct gol *gol)
+{
+    for (int k = 0; k < gol->x; k++) {
+        free(gol->mundos[SIGUIENTE][k]);
+        free(gol->mundos[ACTUAL][k]); 
     }
-    printf("\n");
-  }
+    free(gol->mundos[SIGUIENTE]);
+    free(gol->mundos[ACTUAL]);
 }
 
-void gol_step(struct gol *gol, const int x, const int y) {
-  for (int i = 0; i < x; i++) {
-    for (int j = 0; j < y; j++) {
-      int alives_neighbors = count_neighbors(g, i, j, x, y);
-      if (gol->mundos[ACTUAL][i][j] && (alives_neighbors < 2 || alives_neighbors > 3))
-      {
-        gol->mundos[SIGUIENTE][i][j] = 0;
-      }
-      else if (gol->mundos[ACTUAL][i][j] && (alives_neighbors == 2 || alives_neighbors == 3))
-      {
-        gol->mundos[SIGUIENTE][i][j] = 1;
-      }
-      else if (!(gol->mundos[ACTUAL][i][j]) && alives_neighbors == 3)
-      {
-        gol->mundos[SIGUIENTE][i][j] = 1;
-      }
-      else if (!(gol->mundos[ACTUAL][i][j]) && alives_neighbors != 3)
-      {
-        gol->mundos[SIGUIENTE][i][j] = 0;
-      }
+void gol_init(struct gol *gol)
+{
+    for (int x = 0; x < gol->x; x++) {
+        for (int y = 0; y < gol->y; y++) { 
+            gol->mundos[ACTUAL][x][y] = 0;
+        }
     }
-  }
-  bool **aux_array = gol->mundos[ACTUAL];
-  gol->mundos[ACTUAL] = gol->mundos[SIGUIENTE];
-  gol->mundos[SIGUIENTE] = aux_array;
+            // Initial pattern
+            gol->mundos[ACTUAL][0][1] = 1;
+            gol->mundos[ACTUAL][1][2] = 1;
+            gol->mundos[ACTUAL][2][0] = 1;
+            gol->mundos[ACTUAL][2][1] = 1;
+            gol->mundos[ACTUAL][2][2] = 1;
 }
 
-static int count_neighbors(const struct gol *gol, const int i, const int j, const int f, const int c) {
-  int count_neighbors = -get_cell(gol, i, j, f, c);
-  for (int x = i - 1; x < i + 2; x++) {
-    for (int y = j - 1; y < j + 2; y++) {
-      if (get_cell(gol, x, y, f, c))
-        count_neighbors++;
+void gol_print(struct gol *gol)
+{
+    for (int x = 0; x < gol->x; x++) {
+        for (int y = 0; y < gol->y; y++) {
+            printf("%c ", gol->mundos[ACTUAL][x][y]? '#' : '.');
+        }
+        printf("\n");
     }
-  }
-  return count_neighbors;
+}
+
+void gol_step(struct gol *gol)
+{
+    for (int x = 0; x < gol->x; x++) {
+        for (int y = 0; y < gol->y; y++) {
+            int an = count_neighbors(gol, x, y);
+            if (gol->mundos[ACTUAL][x][y]) {
+                    gol->mundos[SIGUIENTE][x][y] = (an == 2) || (an == 3);
+            }   else {      
+                    gol->mundos[SIGUIENTE][x][y] = (an == 3);
+                }
+        }      
+    }
+    bool **swap = gol->mundos[ACTUAL];
+    gol->mundos[ACTUAL] = gol->mundos[SIGUIENTE];
+    gol->mundos[SIGUIENTE] = swap;
+}
+
+static int count_neighbors(const struct gol *gol, int x, int y)
+{
+    int count = 0;
+    
+    count += get_cell(gol, x - 1, y + 1);
+    count += get_cell(gol, x, y + 1);
+    count += get_cell(gol, x + 1, y + 1);
+    
+    count += get_cell(gol, x - 1, y);
+    count += get_cell(gol, x + 1, y);
+    
+    count += get_cell(gol, x - 1, y - 1);
+    count += get_cell(gol, x, y - 1);
+    count += get_cell(gol, x + 1, y - 1);
+    
+    return count;         
 }
 
 static bool get_cell(const struct gol *gol, int x, int y)
 {
-	if (x >= TAM_X)
-		x = 0;
-	else if (x < 0)
-		x = TAM_X - 1;
-
-	if (y >= TAM_Y)
-		y = 0;
-	else if (y < 0)
-		y = TAM_Y - 1;
-
-	return gol->mundos[ACTUAL][x][y];
-}
-
-void gol_alloc(struct gol *gol, const int x, const int y) {
-  gol->mundos[ACTUAL] = (bool **) malloc(x * sizeof(bool *));
-  gol->mundos[SIGUIENTE] = (bool **) malloc(x * sizeof(bool *));
-  for (int i = 0; i < cols; i++)
-  {
-    gol->worlds[ACTUAL][i] = (bool *) malloc(y * sizeof(bool));
-    gol->worlds[SIGUIENTE][i] = (bool *) malloc(y * sizeof(bool));
-  }
-}
-
-void gol_free(struct gol *gol, const int y) {
-  for (int i = 0; i < y; i++) {
-    free(gol->worlds[SIGUIENTE][i]);
-    free(gol->worlds[ACTUAL][i]);
-  }
-  free(gol->worlds[SIGUIENTE]);
-  free(gol->worlds[ACTUAL]);
+     if(x >= gol->x)
+        x = 0;
+    else if (x < 0)
+        x = gol->x - 1;
+    if(y >= gol->y)
+        y = 0;
+    else if (y <0)
+        y = gol->y - 1;
+    return gol->mundos[ACTUAL][x][y];
 }
