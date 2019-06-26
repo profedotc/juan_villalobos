@@ -30,7 +30,8 @@ void gol_print(const struct gol *gol)
 	printf("\n");
 }
 
-void gol_step(struct gol *gol) {
+void gol_step(struct gol *gol)
+{
 	for (int i = 0; i < TAM_X; i++) {
 		for (int j = 0; j < TAM_Y; j++) {
 			int n = gol_count_neighbors(gol, i, j);
@@ -43,8 +44,10 @@ void gol_step(struct gol *gol) {
 	gol->mundo = !gol->mundo;
 }
 
-int gol_count_neighbors(const struct gol *gol, int x, int y) {
+int gol_count_neighbors(const struct gol *gol, int x, int y)
+{
 	int count = 0;
+
 	count += gol_get_cell(gol, x - 1, y + 1);
 	count += gol_get_cell(gol, x - 0, y + 1);
 	count += gol_get_cell(gol, x + 1, y + 1);
@@ -53,10 +56,13 @@ int gol_count_neighbors(const struct gol *gol, int x, int y) {
 	count += gol_get_cell(gol, x - 1, y - 1);
 	count += gol_get_cell(gol, x - 0, y - 1);
 	count += gol_get_cell(gol, x + 1, y - 1);
+
 	return count;
 }
 
-bool gol_get_cell(const struct gol *gol, int x, int y) {
+bool gol_get_cell(const struct gol *gol, int x, int y)
+{
+	// Fix coords
 	if (x >= TAM_X)
 		x = 0;
 	else if (x < 0)
