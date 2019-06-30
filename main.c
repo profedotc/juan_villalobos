@@ -15,12 +15,11 @@ int main () {
         struct gol gol;
         gol_alloc(&gol, TAM_X, TAM_Y);
         gol_init(&gol);
-        do 
-        {
+        do {
                 printf("\033cIteration %d\n", i++);
                 gol_print(&gol);
                 gol_step(&gol);
         }   while (getchar() != 'q');
             gol_free(&gol);
-            return EXIT_SUCCESS;
+        return EXIT_SUCCESS;
 }
