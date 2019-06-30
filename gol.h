@@ -1,18 +1,19 @@
+
 #ifndef _GOL_H_
 #define _GOL_H_
 
 #include <stdbool.h>
 
-#define TAM_X 10
-#define TAM_Y 20
-
 struct gol {
-	bool mundos[2][TAM_X][TAM_Y];
-	unsigned int mundo;
+    bool **mundos[2];
+    int x;
+    int y;
 };
-
+// FUNCTIONS
+void gol_alloc(struct gol *gol, int x, int y);
+void gol_free(struct gol *gol);
 void gol_init(struct gol *gol);
-void gol_print(const struct gol *gol);
+void gol_print(struct gol *gol);
 void gol_step(struct gol *gol);
-
+// END
 #endif

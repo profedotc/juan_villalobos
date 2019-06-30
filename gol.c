@@ -1,80 +1,107 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "gol.h"
 
-#include <stdio.h>
+enum world_type {
+        ACTUAL,
+        SIGUIENTE,
+};
 
 static bool get_cell(const struct gol *gol, int x, int y);
 static int count_neighbors(const struct gol *gol, int x, int y);
 
+void gol_alloc(struct gol *gol, int x, int y)
+{
+    gol->mundos[ACTUAL] = (bool **)malloc(x * sizeof(bool*));
+    gol->mundos[SIGUIENTE] = (bool **)malloc(x * sizeof(bool*));
+    for (int k = 0; k < x; k++) {
+        gol->mundos[ACTUAL][k] = (bool *)malloc(y * sizeof(bool));
+        gol->mundos[SIGUIENTE][k] = (bool *)malloc(y * sizeof(bool));
+    }
+    gol->x = x;
+    gol->y = y;
+}
+
+void gol_free(struct gol *gol)
+{
+    for (int k = 0; k < gol->x; k++) {
+        free(gol->mundos[SIGUIENTE][k]);
+        free(gol->mundos[ACTUAL][k]); 
+    }
+    free(gol->mundos[SIGUIENTE]);
+    free(gol->mundos[ACTUAL]);
+}
+
 void gol_init(struct gol *gol)
 {
-	gol->mundo = 0;
-
-	for (int i = 0; i < TAM_X; i++)
-		for (int j = 0; j < TAM_Y; j++)
-			gol->mundos[gol->mundo][i][j] = false;
-
-	// Glider
-	gol->mundos[gol->mundo][0][1] = true;
-	gol->mundos[gol->mundo][1][2] = true;
-	gol->mundos[gol->mundo][2][0] = true;
-	gol->mundos[gol->mundo][2][1] = true;
-	gol->mundos[gol->mundo][2][2] = true;
+    for (int x = 0; x < gol->x; x++) {
+        for (int y = 0; y < gol->y; y++) { 
+            gol->mundos[ACTUAL][x][y] = 0;
+        }
+    }
+            // Initial pattern
+            gol->mundos[ACTUAL][0][1] = 1;
+            gol->mundos[ACTUAL][1][2] = 1;
+            gol->mundos[ACTUAL][2][0] = 1;
+            gol->mundos[ACTUAL][2][1] = 1;
+            gol->mundos[ACTUAL][2][2] = 1;
 }
-
-void gol_print(const struct gol *gol)
+// 4th Function
+void gol_print(struct gol *gol)
 {
-	for (int i = 0; i < TAM_X; i++) {
-		for (int j = 0; j < TAM_Y; j++) {
-			printf("%s", gol->mundos[gol->mundo][i][j] ?
-				" #" : " .");
-		}
-		printf("\n");
-	}
-	printf("\n");
+    for (int x = 0; x < gol->x; x++) {
+        for (int y = 0; y < gol->y; y++) {
+            printf("%c ", gol->mundos[ACTUAL][x][y]? '#' : '.');
+        }
+        printf("\n");
+    }
 }
-
+// 5th Function
+// an = aive neighbors;
 void gol_step(struct gol *gol)
 {
-	for (int i = 0; i < TAM_X; i++) {
-		for (int j = 0; j < TAM_Y; j++) {
-			int n = count_neighbors(gol, i, j);
-			gol->mundos[!gol->mundo][i][j] =
-				(gol->mundos[gol->mundo][i][j] && n == 2)
-				|| n == 3;
-		}
-	}
-
-	gol->mundo = !gol->mundo;
+    for (int x = 0; x < gol->x; x++) {
+        for (int y = 0; y < gol->y; y++) {
+            int an = count_neighbors(gol, x, y);
+            if (gol->mundos[ACTUAL][x][y]) {
+                    gol->mundos[SIGUIENTE][x][y] = (an == 2) || (an == 3);
+            }   else {      
+                    gol->mundos[SIGUIENTE][x][y] = (an == 3);
+                }
+        }      
+    }
+    bool **swap = gol->mundos[ACTUAL];
+    gol->mundos[ACTUAL] = gol->mundos[SIGUIENTE];
+    gol->mundos[SIGUIENTE] = swap;
 }
 
 static int count_neighbors(const struct gol *gol, int x, int y)
 {
-	int count = 0;
-
-	count += get_cell(gol, x - 1, y + 1);
-	count += get_cell(gol, x - 0, y + 1);
-	count += get_cell(gol, x + 1, y + 1);
-	count += get_cell(gol, x - 1, y + 0);
-	count += get_cell(gol, x + 1, y + 0);
-	count += get_cell(gol, x - 1, y - 1);
-	count += get_cell(gol, x - 0, y - 1);
-	count += get_cell(gol, x + 1, y - 1);
-
-	return count;
+    int anc = 0;
+    
+    anc += get_cell(gol, x - 1, y + 1);
+    anc += get_cell(gol, x, y + 1);
+    anc += get_cell(gol, x + 1, y + 1);
+    
+    anc += get_cell(gol, x - 1, y);
+    anc += get_cell(gol, x + 1, y);
+    
+    anc += get_cell(gol, x - 1, y - 1);
+    anc += get_cell(gol, x, y - 1);
+    anc += get_cell(gol, x + 1, y - 1);
+    
+    return anc;         
 }
 
 static bool get_cell(const struct gol *gol, int x, int y)
 {
-	// Fix coords
-	if (x >= TAM_X)
-		x = 0;
-	else if (x < 0)
-		x = TAM_X - 1;
-
-	if (y >= TAM_Y)
-		y = 0;
-	else if (y < 0)
-		y = TAM_Y - 1;
-
-	return gol->mundos[gol->mundo][x][y];
+     if(x >= gol->x)
+        x = 0;
+    else if (x < 0)
+        x = gol->x - 1;
+    if(y >= gol->y)
+        y = 0;
+    else if (y <0)
+        y = gol->y - 1;
+    return gol->mundos[ACTUAL][x][y];
 }
