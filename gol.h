@@ -1,16 +1,15 @@
-#ifndef _gol_H_
-#define _gol_H_
-
+#ifndef _GOL_H_
+#define _GOL_H_
+// HEADERS
 #include <stdbool.h>
 
-struct gol
-{
+struct gol {
     bool **mundos[2];
     int x;
     int y;
 };
 
-void gol_alloc(struct gol *gol, int sx, int sy);
+void gol_alloc(struct gol *gol, int x, int y);
 void gol_free(struct gol *gol);
 void gol_init(struct gol *gol);
 void gol_print(struct gol *gol);

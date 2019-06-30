@@ -1,10 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "gol.h"
 
-#include <stdio.h>
-
-enum mundo {
-  ACTUAL = 0,
-  SIGUIENTE = 1,
+enum world_type {
+        ACTUAL,
+        SIGUIENTE,
 };
 
 static bool get_cell(const struct gol *gol, int x, int y);
@@ -39,7 +39,7 @@ void gol_init(struct gol *gol)
             gol->mundos[ACTUAL][x][y] = 0;
         }
     }
-            // Initial pattern
+
             gol->mundos[ACTUAL][0][1] = 1;
             gol->mundos[ACTUAL][1][2] = 1;
             gol->mundos[ACTUAL][2][0] = 1;
@@ -76,20 +76,20 @@ void gol_step(struct gol *gol)
 
 static int count_neighbors(const struct gol *gol, int x, int y)
 {
-    int count = 0;
+    int anc = 0;
     
-    count += get_cell(gol, x - 1, y + 1);
-    count += get_cell(gol, x, y + 1);
-    count += get_cell(gol, x + 1, y + 1);
+    anc += get_cell(gol, x - 1, y + 1);
+    anc += get_cell(gol, x, y + 1);
+    anc += get_cell(gol, x + 1, y + 1);
     
-    count += get_cell(gol, x - 1, y);
-    count += get_cell(gol, x + 1, y);
+    anc += get_cell(gol, x - 1, y);
+    anc += get_cell(gol, x + 1, y);
     
-    count += get_cell(gol, x - 1, y - 1);
-    count += get_cell(gol, x, y - 1);
-    count += get_cell(gol, x + 1, y - 1);
+    anc += get_cell(gol, x - 1, y - 1);
+    anc += get_cell(gol, x, y - 1);
+    anc += get_cell(gol, x + 1, y - 1);
     
-    return count;         
+    return anc;         
 }
 
 static bool get_cell(const struct gol *gol, int x, int y)
