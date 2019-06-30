@@ -39,14 +39,13 @@ void gol_init(struct gol *gol)
             gol->mundos[ACTUAL][x][y] = 0;
         }
     }
-            // Initial pattern
             gol->mundos[ACTUAL][0][1] = 1;
             gol->mundos[ACTUAL][1][2] = 1;
             gol->mundos[ACTUAL][2][0] = 1;
             gol->mundos[ACTUAL][2][1] = 1;
             gol->mundos[ACTUAL][2][2] = 1;
 }
-// 4th Function
+
 void gol_print(struct gol *gol)
 {
     for (int x = 0; x < gol->x; x++) {
@@ -56,8 +55,7 @@ void gol_print(struct gol *gol)
         printf("\n");
     }
 }
-// 5th Function
-// an = aive neighbors;
+
 void gol_step(struct gol *gol)
 {
     for (int x = 0; x < gol->x; x++) {

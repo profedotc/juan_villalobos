@@ -5,7 +5,7 @@
 #define IT 1000
 #define TAM_X 10
 #define TAM_Y 20
-// MAIN
+
 int main ()
 {
     struct gol gol;
