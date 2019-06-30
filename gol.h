@@ -9,11 +9,11 @@ struct gol {
     int x;
     int y;
 };
-// FUNCTIONS
+
 void gol_alloc(struct gol *gol, int x, int y);
 void gol_free(struct gol *gol);
 void gol_init(struct gol *gol);
 void gol_print(struct gol *gol);
 void gol_step(struct gol *gol);
-// END
+
 #endif
