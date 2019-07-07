@@ -22,4 +22,4 @@ gol.o: gol.c gol.h
 
 clean:
 	rm gol
-rm *.o
+	rm *.o
