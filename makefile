@@ -1,12 +1,25 @@
-.PHONY: all clean run
-all: exec
-exec: main.o gol.o
-	gcc main.o gol.o -o exec
+CC = gcc $(CFLAGS)
+CFLAGS = -Wall -Wextra -std=c99
+
+.PHONY: all test debug release clean
+
+debug: CFLAGS += -g -O0
+debug: gol
+
+release: CFLAGS += -g -O3
+release: gol
+
+all: debug
+
+gol: gol.o main.o
+	$(CC) gol.o main.c -o gol
+
 main.o: main.c gol.h
-	gcc -c main.c
-gol.o: gol.h gol.c
-	gcc -c gol.c
-run: exec
-	./exec
-clean: clean
-	rm main.o gol.o exec 
+	$(CC) -c main.c
+
+gol.o: gol.c gol.h
+	$(CC) -c gol.c
+
+clean:
+	rm gol
+	rm *.o
