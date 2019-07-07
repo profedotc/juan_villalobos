@@ -1,27 +1,25 @@
 CC = gcc $(CFLAGS)
 CFLAGS = -Wall -Wextra -std=c99
 
-.PHONY: all debug release test clean
+.PHONY: all test debug release clean
+
+debug: CFLAGS += -g -O0
+debug: gol
+
+release: CFLAGS += -g -O3
+release: gol
 
 all: debug
 
-release : CFLAGS += -g -O3
-release : main
+gol: gol.o main.o
+	$(CC) gol.o main.c -o gol
 
-debug : CFLAGS += -g -O0
-debug : main
-
-main: main.o gol.o
-	$(CC) main.o gol.o -o main
-
-mem_test: mem_test.o gol.o
-	$(CC) mem_test.o gol.o -o mem_test
-        
 main.o: main.c gol.h
 	$(CC) -c main.c
-        
+
 gol.o: gol.c gol.h
 	$(CC) -c gol.c
-    
+
 clean:
-rm *.o main
+	rm gol
+rm *.o
