@@ -1,6 +1,6 @@
 #ifndef _GOL_H_
 #define _GOL_H_
-// HEADERS
+
 #include <stdbool.h>
 
 struct gol {
